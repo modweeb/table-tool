@@ -5,6 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مولد جدول</title>
     <style>
+    	body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            direction: rtl;
+            text-align: right;
+            margin: 0;
+            padding: 0;
+        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 2px solid #dbdbdb; /* تغيير اللون حسب رغبتك */
+}
+
+th {
+    background-color: #ffffff; /* لون خلفية عنوان الجدول */
+}
+
+td {
+    background-color: #f9f9f9; /* لون خلفية محتوى الجدول */
+}
+
+table tr:nth-child(even) td {
+    background-color: #f9f9f9; /* لون مختلف للصفوف الزوجية */
+}
         .table-content-generator {
             text-align: right;
             margin: 20px;
@@ -21,7 +52,7 @@
             text-align: center;
             border-width: 2px;
             border-right: 2px solid var(--border-color);
-            background: linear-gradient(to left, var(--bg-color1), var(--bg-color2));
+            background: linear-gradient(to right, var(--bg-color1), var(--bg-color2));
         }
 
         input[type="text"] {
@@ -40,11 +71,11 @@
 
         button {
             padding: 10px;
-            background-color: #6b21cc;
+            background-color: #5e2ebf;
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 12px;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -76,8 +107,8 @@
         <table id="contentTable">
             <thead>
                 <tr>
-                    <th><input id="column1Name" type="text" value="العمود الأول" /></th>
-                    <th><input id="column2Name" type="text" value="العمود الثاني" /></th>
+                    <th><input id="theaddressName" type="text" value="العنوان" /></th>
+                    <th><input id="DescriptionName" type="text" value="الوصف" /></th>
                 </tr>
             </thead>
             <tbody>
@@ -100,18 +131,18 @@
             <button onclick="addRow()"> +</button>
             <button onclick="generateCode()">توليد</button>
             <button onclick="previewTable()">معاينة</button>
-            <button onclick="copyCode()">نسخ الكود</button>
+            <button onclick="copyCode()">نسخ</button>
         </div>
         <p id="copyNotification" style="display: none;">تم النسخ بنجاح!</p>
 
         <label>اختر لون حدود الجدول:</label>
-        <input type="color" id="borderColor" value="#ffffff">
+        <input type="color" id="borderColor" value="#dbdbdb">
 
         <label>اختر لون الخلفية 1:</label>
-        <input type="color" id="bgColor1" value="#6b21cc">
+        <input type="color" id="bgColor1" value="#dbdbdb">
 
         <label>اختر لون الخلفية 2:</label>
-        <input type="color" id="bgColor2" value="#bd3057">
+        <input type="color" id="bgColor2" value="#dbdbdb">
 
         <pre id="generatedCode"></pre>
 
@@ -134,9 +165,9 @@
 
         function generateCode() {
             let tableRows = document.querySelectorAll("#contentTable tbody tr");
-            let col1Name = document.getElementById("column1Name").value;
-            let col2Name = document.getElementById("column2Name").value;
-            let code = `<table style="border-color: ${document.getElementById("borderColor").value}; background: linear-gradient(to left, ${document.getElementById("bgColor1").value}, ${document.getElementById("bgColor2").value});">\n<thead>\n<tr><th>${col1Name}</th><th>${col2Name}</th></tr>\n</thead>\n<tbody>\n`;
+            let col1Name = document.getElementById("theaddressName").value;
+            let col2Name = document.getElementById("DescriptionName").value;
+            let code = `<table style="border-color: ${document.getElementById("borderColor").value}; background: linear-gradient(to right, ${document.getElementById("bgColor1").value}, ${document.getElementById("bgColor2").value});">\n<thead>\n<tr><th>${col1Name}</th><th>${col2Name}</th></tr>\n</thead>\n<tbody>\n`;
 
             tableRows.forEach(row => {
                 let cells = row.getElementsByTagName("input");
