@@ -5,100 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مولد جدول</title>
     <style>
-    	body {
+        body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             direction: rtl;
             text-align: right;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-th, td {
-    padding: 10px;
-    text-align: center;
-    border: 2px solid #dbdbdb; /* تغيير اللون حسب رغبتك */
-}
-
-th {
-    background-color: #ffffff; /* لون خلفية عنوان الجدول */
-}
-
-td {
-    background-color: #f9f9f9; /* لون خلفية محتوى الجدول */
-}
-
-table tr:nth-child(even) td {
-    background-color: #f9f9f9; /* لون مختلف للصفوف الزوجية */
-}
         .table-content-generator {
-            text-align: right;
-            margin: 20px;
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 10px;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-
         th, td {
-            padding: 8px;
+            padding: 10px;
             text-align: center;
-            border-width: 2px;
-            border-right: 2px solid var(--border-color);
-            background: linear-gradient(to right, var(--bg-color1), var(--bg-color2));
+            border: 2px solid #b3b3b3;
         }
-
+        th {
+            background-color: #b3b3b3;
+        }
+        table tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
         input[type="text"] {
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
         }
-
-        /* تصميم الأزرار الجديدة */
         .buttons-container {
             display: flex;
             gap: 10px;
             margin-top: 15px;
             justify-content: center;
         }
-
         button {
             padding: 10px;
             background-color: #5e2ebf;
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 12px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            font-size: 14px;
+            border-radius: 8px;
+            width: auto;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
-
         button:hover {
             background-color: rgba(107, 33, 204, 0.8);
             transform: scale(1.1);
         }
-
-        pre {
+        .color-picker-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .color-picker-container label {
+            font-size: 14px;
+            color: #333;
+            margin-right: 10px;
+        }
+        .code-box {
             background-color: #f4f4f4;
             padding: 10px;
             margin-top: 20px;
             border: 1px solid #ccc;
-            white-space: pre-wrap;
+            border-radius: 8px;
+            position: relative;
         }
-
-        #copyNotification {
-            color: green;
-            font-weight: bold;
+        #robotsOutput {
+            width: 100%;
+            height: 100px;
             margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            resize: none; /* يمنع تغيير حجم مربع النص */
+        }
+        #copyNotification {
+            position: absolute;
+            top: -25px;
+            right: 50%;
+            transform: translateX(50%);
+            background-color: #4caf50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            display: none;
         }
     </style>
 </head>
@@ -128,27 +137,30 @@ table tr:nth-child(even) td {
         </table>
 
         <div class="buttons-container">
-            <button onclick="addRow()"> +</button>
+            <button onclick="addRow()">+</button>
             <button onclick="generateCode()">توليد</button>
             <button onclick="previewTable()">معاينة</button>
-            <button onclick="copyCode()">نسخ</button>
         </div>
-        <p id="copyNotification" style="display: none;">تم النسخ بنجاح!</p>
 
-        <label>اختر لون حدود الجدول:</label>
-        <input type="color" id="borderColor" value="#dbdbdb">
+        <div class="color-picker-container">
+            <label>لون حدود الجدول:</label>
+            <input type="color" id="borderColor" value="#f5f5f5">
 
-        <label>اختر لون الخلفية 1:</label>
-        <input type="color" id="bgColor1" value="#dbdbdb">
+            <label>لون الخلفية 1:</label>
+            <input type="color" id="bgColor1" value="#ffffff">
 
-        <label>اختر لون الخلفية 2:</label>
-        <input type="color" id="bgColor2" value="#dbdbdb">
+            <label>لون الخلفية 2:</label>
+            <input type="color" id="bgColor2" value="#ffffff">
+        </div>
 
-        <pre id="generatedCode"></pre>
+        <div class="code-box">
+            <textarea id="robotsOutput" readonly placeholder="الكود سيظهر هنا بعد التوليد..."></textarea>
+            <button onclick="copyToClipboard()">نسخ إلى الحافظة</button>
+            <span id="copyNotification">تم النسخ!</span>
+        </div>
 
-        <!-- إضافة منطقة لمعاينة مظهر الجدول -->
         <h3>معاينة مظهر الجدول:</h3>
-        <div id="tablePreview" style="border: 1px solid #ccc; padding: 10px; margin-top: 10px;"></div>
+        <div id="tablePreview" style="border: 1px solid #ccc; padding: 10px; margin-top: 10px; border-radius: 8px;"></div>
     </div>
 
     <script>
@@ -167,33 +179,36 @@ table tr:nth-child(even) td {
             let tableRows = document.querySelectorAll("#contentTable tbody tr");
             let col1Name = document.getElementById("theaddressName").value;
             let col2Name = document.getElementById("DescriptionName").value;
-            let code = `<table style="border-color: ${document.getElementById("borderColor").value}; background: linear-gradient(to right, ${document.getElementById("bgColor1").value}, ${document.getElementById("bgColor2").value});">\n<thead>\n<tr><th>${col1Name}</th><th>${col2Name}</th></tr>\n</thead>\n<tbody>\n`;
+            let borderColor = document.getElementById("borderColor").value;
+            let bgColor1 = document.getElementById("bgColor1").value;
+            let bgColor2 = document.getElementById("bgColor2").value;
+
+            let code = `<table style="width: 100%; border-collapse: collapse; border: 2px solid ${borderColor};">\n<thead>\n<tr style="background: linear-gradient(to right, ${bgColor1}, ${bgColor2});">\n<th style="padding: 10px; border: 2px solid ${borderColor};">${col1Name}</th>\n<th style="padding: 10px; border: 2px solid ${borderColor};">${col2Name}</th>\n</tr>\n</thead>\n<tbody>\n`;
 
             tableRows.forEach(row => {
                 let cells = row.getElementsByTagName("input");
-                code += `<tr><td>${cells[0].value}</td><td>${cells[1].value}</td></tr>\n`;
+                code += `<tr><td style="padding: 10px; text-align: center; border: 2px solid ${borderColor}; background-color: ${bgColor1};">${cells[0].value}</td><td style="padding: 10px; text-align: center; border: 2px solid ${borderColor}; background-color: ${bgColor2};">${cells[1].value}</td></tr>\n`;
             });
 
             code += '</tbody>\n</table>';
             
-            document.getElementById("generatedCode").textContent = code;
+            document.getElementById("robotsOutput").value = code; // عرض الكود في textarea
         }
 
-        function copyCode() {
-            const code = document.getElementById("generatedCode").textContent;
-            
-            navigator.clipboard.writeText(code).then(() => {
-                const notification = document.getElementById("copyNotification");
-                notification.style.display = "block";
-                setTimeout(() => {
-                    notification.style.display = "none";
-                }, 2000);
-            });
+        function copyToClipboard() {
+            const textarea = document.getElementById("robotsOutput");
+            textarea.select();
+            document.execCommand('copy');
+            const notification = document.getElementById("copyNotification");
+            notification.style.display = "block"; // إظهار إشعار النسخ
+            setTimeout(() => {
+                notification.style.display = "none"; // إخفاء الإشعار بعد 2 ثانية
+            }, 2000);
         }
 
         function previewTable() {
             const previewArea = document.getElementById("tablePreview");
-            previewArea.innerHTML = document.getElementById("generatedCode").textContent;
+            previewArea.innerHTML = document.getElementById("robotsOutput").value;
         }
     </script>
 </body>
